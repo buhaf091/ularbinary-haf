@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Edukasi Bilangan Biner Dasar - SMKS Purnama Gempol</title>
+    <!-- Favicon SVG Data URL -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐍</text></svg>">
+    
+    <style>
+        /* CSS RESET & MODERN SYSTEM STYLES */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-main: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --primary: #10b981;
+            --primary-hover: #059669;
+            --accent: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER STYLES */
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--card-border);
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CARD CONTAINERS */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* FORM STYLES */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #0f172a;
+            border: 1px solid var(--card-border);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* SELECTION GRID (COLOR & ACCESSORY) */
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .color-option {
+            height: 50px;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+
+        .color-option.selected {
+            border-color: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .accessory-option {
+            background-color: #0f172a;
+            border: 2px solid var(--card-border);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .accessory-option:hover {
+            border-color: var(--accent);
+        }
+
+        .accessory-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .accessory-option svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--text-main);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: black;
+        }
+
+        /* MATERI TABLE STYLES */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid var(--card-border);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--primary);
+        }
+
+        /* GAME BOARD & DASHBOARD */
+        .game-dashboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+
+        .hearts {
+            color: var(--danger);
+            letter-spacing: 2px;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            aspect-ratio: 1 / 1;
+        }
+
+        canvas {
+            background-color: #000;
+            border: 3px solid var(--card-border);
+            border-radius: 0.5rem;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* GAME CONTROLS MENU */
+        .game-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-controls .btn {
+            width: auto;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* TOUCH CONTROLS FOR MOBILE */
+        .touch-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            max-width: 200px;
+            margin: 1rem auto 0;
+        }
+
+        .touch-btn {
+            background-color: var(--card-border);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .touch-btn:active {
+            background-color: var(--primary);
+            color: black;
+        }
+
+        /* MODAL KUIS */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-btn {
+            background-color: #0f172a;
+            border: 1px solid var(--card-border);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .quiz-btn:hover {
+            background-color: var(--accent);
+        }
+
+        /* SERTIFIKAT STYLES */
+        .certificate-box {
+            background: #fff;
+            color: #000;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            border: 10px double #1e293b;
+            text-align: center;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .certificate-box h2 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .certificate-box p {
+            margin: 0.5rem 0;
+        }
+
+        .cert-signatures {
+            display: flex;
+       	    justify-content: space-between;
+       	    margin-top: 3rem;
+       	    padding: 0 1rem;
+       	    gap: 2rem;
+        }
+
+        .sig-block {
+            text-align: center;
+            width: 240px;
+        }
+
+        .sig-line {
+            margin-top: 3rem;
+            border-bottom: 1px solid #000;
+            font-weight: bold;
+	    white-space: nowrap; /* Mencegah teks turun ke baris baru */
+	    font-size: 0.95rem;  /* (Opsional) Menyesuaikan ukuran font jika diperlukan */
+        }
+
+        /* PRINT MEDIA STYLES */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-screen, #certificate-screen * {
+                visibility: visible;
+            }
+            #certificate-screen {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER UTAMA -->
+        <header>
+            <h1>🐍 Game Edukasi Bilangan Biner 🍎</h1>
+            <p>SMKS Purnama Gempol - Mata Pelajaran Informatika</p>
+        </header>
+
+        <!-- SCREEN 1: FORM IDENTITAS & KUSTOMISASI -->
+        <div id="registration-screen" class="card">
+            <h2 style="margin-bottom: 1rem; text-align: center;">Identitas Siswa & Kustomisasi Ular</h2>
+            <form id="player-form">
+                <div class="form-group">
+                    <label for="player-name">Nama Lengkap Siswa:</label>
+                    <input type="text" id="player-name" class="form-control" placeholder="Masukkan nama lengkap..." required>
+                </div>
+                <div class="form-group">
+                    <label for="player-class">Kelas:</label>
+                    <input type="text" id="player-class" class="form-control" value="X SMKS Purnama Gempol" required readonly>
+                </div>
+                <div class="form-group">
+                    <label for="player-major">Jurusan:</label>
+                    <select id="player-major" class="form-control" required>
+                        <option value="Desain Komunikasi Visual (DKV)">Desain Komunikasi Visual (DKV)</option>
+                        <option value="Desain Produksi Busana (DPB)">Desain Produksi Busana (DPB)</option>
+                    </select>
+                </div>
+
+                <!-- PILIHAN WARNA ULAR (VISUAL SWATCH) -->
+                <div class="form-group">
+                    <label>Pilih Warna Ular:</label>
+                    <div class="selection-grid" id="color-selector">
+                        <div class="color-option selected" data-color="#10b981" style="background-color: #10b981;"></div>
+                        <div class="color-option" data-color="#3b82f6" style="background-color: #3b82f6;"></div>
+                        <div class="color-option" data-color="#ec4899" style="background-color: #ec4899;"></div>
+                        <div class="color-option" data-color="#f59e0b" style="background-color: #f59e0b;"></div>
+                        <div class="color-option" data-color="#8b5cf6" style="background-color: #8b5cf6;"></div>
+                        <div class="color-option" data-color="#ef4444" style="background-color: #ef4444;"></div>
+                    </div>
+                </div>
+
+                <!-- PILIHAN AKSESORIS ULAR (ICON VISUAL SVG) -->
+                <div class="form-group">
+                    <label>Pilih Aksesoris Ular:</label>
+                    <div class="selection-grid" id="accessory-selector">
+                        <!-- Tanpa Aksesoris -->
+                        <div class="accessory-option selected" data-accessory="none">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </div>
+                        <!-- Mahkota -->
+                        <div class="accessory-option" data-accessory="crown">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                        </div>
+                        <!-- Topi -->
+                        <div class="accessory-option" data-accessory="hat">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3c-4 0-7 2-7 6v2H2v3h20v-3h-3V9c0-4-3-6-7-6zm-5 8V9c0-2.2 2.2-4 5-4s5 1.8 5 4v2H7z"/></svg>
+                        </div>
+                        <!-- Kacamata -->
+                        <div class="accessory-option" data-accessory="glasses">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 11c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm12 0c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/></svg>
+                        </div>
+                        <!-- Pita -->
+                        <div class="accessory-option" data-accessory="bow">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-4 2L3 8v8l5-4zm8 0l5 4V8l-5 4z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Lanjut ke Materi Pembelajaran ➔</button>
+            </form>
+        </div>
+
+        <!-- SCREEN 2: MODUL MATERI PEMBELAJARAN -->
+        <div id="materi-screen" class="card hidden">
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">📚 Modul Materi: Bilangan Biner Dasar</h2>
+            
+            <p>Selamat datang! Sebelum mulai bermain, pelajari materi dasar konversi sistem bilangan di bawah ini:</p>
+            
+            <div style="margin-top: 1rem;">
+                <h3 style="color: var(--accent);">1. Pengertian Sistem Bilangan</h3>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><b>Biner (Base-2):</b> Sistem bilangan berbasis 2 yang hanya menggunakan angka <b>0</b> dan <b>1</b>.</li>
+                    <li><b>Desimal (Base-10):</b> Sistem bilangan berbasis 10 yang kita gunakan sehari-hari (<b>0-9</b>).</li>
+                    <li><b>Oktal (Base-8):</b> Sistem bilangan berbasis 8 (<b>0-7</b>).</li>
+                    <li><b>Hexadesimal (Base-16):</b> Sistem berbasis 16 (<b>0-9</b> dan huruf <b>A-F</b>, dimana A=10, B=11, C=12, D=13, E=14, F=15).</li>
+                </ul>
+            </div>
+
+            <h3 style="color: var(--accent); margin-top: 1.5rem;">2. Tabel Konversi Bilangan (0 - 15)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Desimal (Base-10)</th>
+                            <th>Biner (Base-2)</th>
+                            <th>Oktal (Base-8)</th>
+                            <th>Hexadesimal (Base-16)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>0000</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>0001</td><td>1</td><td>1</td></tr>
+                        <tr><td>2</td><td>0010</td><td>2</td><td>2</td></tr>
+                        <tr><td>3</td><td>0011</td><td>3</td><td>3</td></tr>
+                        <tr><td>4</td><td>0100</td><td>4</td><td>4</td></tr>
+                        <tr><td>5</td><td>0101</td><td>5</td><td>5</td></tr>
+                        <tr><td>6</td><td>0110</td><td>6</td><td>6</td></tr>
+                        <tr><td>7</td><td>0111</td><td>7</td><td>7</td></tr>
+                        <tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr>
+                        <tr><td>9</td><td>1001</td><td>11</td><td>9</td></tr>
+                        <tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr>
+                        <tr><td>11</td><td>1011</td><td>13</td><td>B</td></tr>
+                        <tr><td>12</td><td>1100</td><td>14</td><td>C</td></tr>
+                        <tr><td>13</td><td>1101</td><td>15</td><td>D</td></tr>
+                        <tr><td>14</td><td>1110</td><td>16</td><td>E</td></tr>
+                        <tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="start-game-btn" class="btn btn-primary" style="margin-top: 1.5rem;">Mulai Bermain Game Ular! 🎮</button>
+        </div>
+
+        <!-- SCREEN 3: GAMEPLAY ARENA -->
+        <div id="game-screen" class="card hidden">
+            <!-- DASHBOARD GAME -->
+            <div class="game-dashboard">
+                <div class="stat-box">⭐ Skor: <span id="score-display">0</span></div>
+                <div class="stat-box">🏆 Level: <span id="level-display">1</span></div>
+                <div class="stat-box">❤️ Nyawa: <span id="lives-display" class="hearts">❤️❤️❤️</span></div>
+            </div>
+
+            <!-- CANVAS -->
+            <div class="canvas-container">
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+            </div>
+
+            <!-- GAME CONTROLS -->
+            <div class="game-controls no-print">
+                <button id="btn-pause" class="btn btn-warning">⏸️ Pause</button>
+                <button id="btn-stop" class="btn btn-danger">⏹️ Stop</button>
+                <button id="btn-reload" class="btn btn-secondary">🔄 Reload</button>
+                <button id="btn-menu" class="btn btn-secondary">🏠 Menu Utama</button>
+            </div>
+
+            <!-- MOBILE ON-SCREEN CONTROLS -->
+            <div class="touch-controls no-print">
+                <div></div>
+                <button class="touch-btn" id="ctrl-up">⬆️</button>
+                <div></div>
+                <button class="touch-btn" id="ctrl-left">⬅️</button>
+                <button class="touch-btn" id="ctrl-down">⬇️</button>
+                <button class="touch-btn" id="ctrl-right">➡️</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: KUIS POPUP MODAL -->
+        <div id="quiz-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3 style="color: var(--primary);">🍎 Apel Dimakan! Jawab Soal:</h3>
+                <p id="quiz-timer" style="color: var(--danger); font-weight: bold; margin: 0.5rem 0;">Waktu: 15 detik</p>
+                <p id="quiz-question" style="font-size: 1.1rem; margin: 1rem 0; font-weight: 600;"></p>
+                <div id="quiz-options" class="quiz-options"></div>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: SERTIFIKAT HASIL BELAJAR -->
+        <div id="certificate-screen" class="card hidden">
+            <div class="certificate-box">
+                <h2>SERTIFIKAT HASIL BELAJAR</h2>
+                <p>Mata Pelajaran Informatika - SMKS Purnama Gempol</p>
+                <hr style="margin: 1rem 0; border: 0; border-top: 1px solid #000;">
+                
+                <p style="margin-top: 1.5rem;">Diberikan Kepada:</p>
+                <h3 id="cert-name" style="font-size: 1.5rem; text-decoration: underline; margin: 0.5rem 0;">Nama Siswa</h3>
+                <p>Kelas: <span id="cert-class">X SMKS Purnama Gempol</span> | Jurusan: <span id="cert-major">DKV</span></p>
+                
+                <p style="margin-top: 1.5rem;">Telah menyelesaikan Evaluasi Pembelajaran Game Edukasi <b>Bilangan Biner Dasar</b> dengan pencapaian:</p>
+                <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0; color: #000;" id="cert-score">SKOR: 100</div>
+                <h3 id="cert-status" style="color: #059669; font-size: 1.4rem;">LULUS ISTIMEWA</h3>
+
+                <!-- TANDA TANGAN -->
+                <div class="cert-signatures">
+                    <div class="sig-block">
+                        <p>Guru Informatika</p>
+                        <div class="sig-line">HAFILAH FARHANA, S.Kom.</div>
+                    </div>
+                    <div class="sig-block">
+                        <p>Kepala Sekolah</p>
+                        <div class="sig-line">M. HARIS ROMLI, S.Kom.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;" class="no-print">
+                <button onclick="window.print()" class="btn btn-primary">🖨️ Cetak / Simpan Sertifikat</button>
+                <button id="btn-restart-all" class="btn btn-secondary">🔄 Main Lagi Dari Awal</button>
+            </div>
+        </div>
+
+        <!-- FOOTER CREDITS -->
+        <footer style="text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;" class="no-print">
+            Game Edukasi diciptakan oleh: <b>HAFILAH FARHANA, S.Kom.</b> &copy; SMKS Purnama Gempol
+        </footer>
+    </div>
+
+    <script>
+        // DATA SOAL KUIS UNTUK MAKAN APEL
+        const quizBank = [
+            { q: "Berapa nilai Desimal dari Biner 0011?", options: ["2", "3", "4", "5"], answer: 1 },
+            { q: "Berapa nilai Biner dari Desimal 5?", options: ["0100", "0101", "0110", "0111"], answer: 1 },
+            { q: "Sistem bilangan Hexadesimal berbasis...", options: ["2", "8", "10", "16"], answer: 3 },
+            { q: "Nilai Hexadesimal dari Desimal 10 adalah...", options: ["A", "B", "C", "D"], answer: 0 },
+            { q: "Sistem bilangan Biner berbasis...", options: ["2", "8", "10", "16"], answer: 0 },
+            { q: "Berapa nilai Oktal dari Desimal 8?", options: ["8", "10", "12", "14"], answer: 1 },
+            { q: "Berapa nilai Biner dari Desimal 12?", options: ["1010", "1100", "1101", "1111"], answer: 1 },
+            { q: "Huruf 'F' pada Hexadesimal bernilai Desimal...", options: ["12", "13", "14", "15"], answer: 3 },
+            { q: "Nilai Desimal dari Biner 1000 adalah...", options: ["6", "7", "8", "9"], answer: 2 },
+            { q: "Sistem bilangan Oktal berbasis...", options: ["2", "8", "10", "16"], answer: 1 }
+        ];
+
+        // STATE GAME GLOBAL
+        let playerData = {
+            name: '',
+            class: 'X SMKS Purnama Gempol',
+            major: '',
+            color: '#10b981',
+            accessory: 'none'
+        };
+
+        let score = 0;
+        let level = 1;
+        let lives = 3;
+        let gameInterval = null;
+        let isPaused = false;
+        let quizTimer = null;
+        let quizTimeLeft = 15;
+
+        // CANVAS & ULAR CONFIG
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        let snake = [{ x: 10, y: 10 }];
+        let dx = 1;
+        let dy = 0;
+        let food = { x: 5, y: 5 };
+
+        // INITIALIZATION & EVENT LISTENERS
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCustomizationEvents();
+            setupFormEvent();
+            setupGameControls();
+            setupTouchControls();
+        });
+
+        // HANDLER COLOR & ACCESSORY SELECTION
+        function setupCustomizationEvents() {
+            const colorOpts = document.querySelectorAll('#color-selector .color-option');
+            colorOpts.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    colorOpts.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    playerData.color = opt.dataset.color;
+                });
+            });
+
+            const accOpts = document.querySelectorAll('#accessory-selector .accessory-option');
+            accOpts.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    accOpts.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    playerData.accessory = opt.dataset.accessory;
+                });
+            });
+        }
+
+        // HANDLER REGISTRATION FORM
+        function setupFormEvent() {
+            document.getElementById('player-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                playerData.name = document.getElementById('player-name').value;
+                playerData.major = document.getElementById('player-major').value;
+
+                document.getElementById('registration-screen').classList.add('hidden');
+                document.getElementById('materi-screen').classList.remove('hidden');
+            });
+
+            document.getElementById('start-game-btn').addEventListener('click', () => {
+                document.getElementById('materi-screen').classList.add('hidden');
+                document.getElementById('game-screen').classList.remove('hidden');
+                initGame();
+            });
+
+            document.getElementById('btn-restart-all').addEventListener('click', () => {
+                document.getElementById('certificate-screen').classList.add('hidden');
+                document.getElementById('registration-screen').classList.remove('hidden');
+            });
+        }
+
+        // GAME LOGIC FUNCTIONS
+        function initGame() {
+            score = 0;
+            level = 1;
+            lives = 3;
+            resetSnake();
+            updateDashboard();
+            startLoop();
+        }
+
+        function resetSnake() {
+            snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }];
+            dx = 1;
+            dy = 0;
+            spawnFood();
+        }
+
+        function spawnFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+        }
+
+        function getSpeed() {
+            if (level === 1) return 150;
+            if (level === 2) return 110;
+            return 75; // Level 3
+        }
+
+        function getQuizTime() {
+            if (level === 1) return 15;
+            if (level === 2) return 10;
+            return 7; // Level 3
+        }
+
+        function startLoop() {
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(gameStep, getSpeed());
+        }
+
+        function gameStep() {
+            if (isPaused) return;
+
+            // Move Snake Head
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            // WALL COLLISION -> LOSE LIFE
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                handleWallCollision();
+                return;
+            }
+
+            // SELF COLLISION -> LOSE LIFE
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    handleWallCollision();
+                    return;
+                }
+            }
+
+            snake.unshift(head);
+
+            // EAT APPLE -> TRIGGER QUIZ
+            if (head.x === food.x && head.y === food.y) {
+                pauseGame();
+                showQuizModal();
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        function handleWallCollision() {
+            lives--;
+            updateDashboard();
+            if (lives <= 0) {
+                endGame();
+            } else {
+                resetSnake();
+            }
+        }
+
+        // RENDERING CANVAS GRAPHICS
+        function draw() {
+            // Clear Background
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Grid Lines (Subtle)
+            ctx.strokeStyle = '#1e293b';
+            for (let i = 0; i < canvas.width; i += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
+                ctx.moveTo(0, i); ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // Draw Apple Food 🍎
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc((food.x * gridSize) + gridSize/2, (food.y * gridSize) + gridSize/2, gridSize/2 - 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Snake 🐍
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? playerData.color : adjustColor(playerData.color, -30);
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 1, gridSize - 1);
+
+                // Draw Head Accessories on segment 0
+                if (index === 0 && playerData.accessory !== 'none') {
+                    drawAccessory(segment.x * gridSize, segment.y * gridSize);
+                }
+            });
+        }
+
+        function drawAccessory(x, y) {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '14px sans-serif';
+            ctx.textAlign = 'center';
+            let icon = '';
+            if (playerData.accessory === 'crown') icon = '👑';
+            else if (playerData.accessory === 'hat') icon = '🎩';
+            else if (playerData.accessory === 'glasses') icon = '👓';
+            else if (playerData.accessory === 'bow') icon = '🎀';
+
+            if (icon) {
+                ctx.fillText(icon, x + gridSize / 2, y - 2);
+            }
+        }
+
+        // UTILITY COLOR SHADER
+        function adjustColor(color, amount) {
+            return color; // Simplified for stability
+        }
+
+        // KUIS & POPUP LOGIC
+        function showQuizModal() {
+            const modal = document.getElementById('quiz-modal');
+            modal.classList.remove('hidden');
+
+            const randomQuiz = quizBank[Math.floor(Math.random() * quizBank.length)];
+            document.getElementById('quiz-question').textContent = randomQuiz.q;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            randomQuiz.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-btn';
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(idx === randomQuiz.answer);
+                optionsContainer.appendChild(btn);
+            });
+
+            // Start Quiz Timer
+            quizTimeLeft = getQuizTime();
+            document.getElementById('quiz-timer').textContent = `Waktu: ${quizTimeLeft} detik`;
+            
+            if (quizTimer) clearInterval(quizTimer);
+            quizTimer = setInterval(() => {
+                quizTimeLeft--;
+                document.getElementById('quiz-timer').textContent = `Waktu: ${quizTimeLeft} detik`;
+                if (quizTimeLeft <= 0) {
+                    clearInterval(quizTimer);
+                    handleAnswer(false); // Time out = wrong answer
+                }
+            }, 1000);
+        }
+
+        function handleAnswer(isCorrect) {
+            if (quizTimer) clearInterval(quizTimer);
+            document.getElementById('quiz-modal').classList.add('hidden');
+
+            if (isCorrect) {
+                score += 10;
+                // LEVEL PROGRESSION (Max Level 3)
+                if (score >= 40 && level === 1) level = 2;
+                if (score >= 70 && level === 2) level = 3;
+            }
+            // SCORE WRONG ANSWER -> Score unchanged (+0), game continues
+
+            updateDashboard();
+            spawnFood();
+            resumeGame();
+
+            // Check if Game Completed (Reach 100 or finish 10 questions max)
+            if (score >= 100) {
+                endGame();
+            }
+        }
+
+        function updateDashboard() {
+            document.getElementById('score-display').textContent = score;
+            document.getElementById('level-display').textContent = level;
+            
+            let heartsStr = '';
+            for (let i = 0; i < lives; i++) heartsStr += '❤️';
+            document.getElementById('lives-display').textContent = heartsStr || '💀';
+        }
+
+        // CONTROLS & NAVIGATION
+        function setupGameControls() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowUp' && dy === 0) { dx = 0; dy = -1; }
+                if (e.key === 'ArrowDown' && dy === 0) { dx = 0; dy = 1; }
+                if (e.key === 'ArrowLeft' && dx === 0) { dx = -1; dy = 0; }
+                if (e.key === 'ArrowRight' && dx === 0) { dx = 1; dy = 0; }
+            });
+
+            document.getElementById('btn-pause').addEventListener('click', () => {
+                isPaused = !isPaused;
+                document.getElementById('btn-pause').textContent = isPaused ? '▶️ Resume' : '⏸️ Pause';
+            });
+
+            document.getElementById('btn-stop').addEventListener('click', endGame);
+            
+            document.getElementById('btn-reload').addEventListener('click', () => {
+                resetSnake();
+                resumeGame();
+            });
+
+            document.getElementById('btn-menu').addEventListener('click', () => {
+                if (gameInterval) clearInterval(gameInterval);
+                document.getElementById('game-screen').classList.add('hidden');
+                document.getElementById('registration-screen').classList.remove('hidden');
+            });
+        }
+
+        function setupTouchControls() {
+            document.getElementById('ctrl-up').addEventListener('click', () => { if (dy === 0) { dx = 0; dy = -1; } });
+            document.getElementById('ctrl-down').addEventListener('click', () => { if (dy === 0) { dx = 0; dy = 1; } });
+            document.getElementById('ctrl-left').addEventListener('click', () => { if (dx === 0) { dx = -1; dy = 0; } });
+            document.getElementById('ctrl-right').addEventListener('click', () => { if (dx === 0) { dx = 1; dy = 0; } });
+        }
+
+        function pauseGame() {
+            isPaused = true;
+        }
+
+        function resumeGame() {
+            isPaused = false;
+            startLoop();
+        }
+
+        // END GAME & SERTIFIKAT GENERATION
+        function endGame() {
+            if (gameInterval) clearInterval(gameInterval);
+            
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('certificate-screen').classList.remove('hidden');
+
+            // Populate Certificate
+            document.getElementById('cert-name').textContent = playerData.name;
+            document.getElementById('cert-class').textContent = playerData.class;
+            document.getElementById('cert-major').textContent = playerData.major;
+            document.getElementById('cert-score').textContent = `SKOR: ${score}`;
+
+            const statusElem = document.getElementById('cert-status');
+            if (score >= 100) {
+                statusElem.textContent = 'LULUS ISTIMEWA 🏆';
+                statusElem.style.color = '#059669';
+            } else if (score >= 65) {
+                statusElem.textContent = 'LULUS TERBAIK ⭐';
+                statusElem.style.color = '#2563eb';
+            } else {
+                statusElem.textContent = 'TIDAK LULUS ❌';
+                statusElem.style.color = '#dc2626';
+            }
+        }
+    </script>
+</body>
+</html>

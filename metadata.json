@@ -1,0 +1,6 @@
+{
+  "name": "Game Edukasi Bilangan Biner - SMKS Purnama Gempol",
+  "description": "Aplikasi Game Edukasi Bilangan Biner Dasar untuk Android & iOS dengan simulasi ular biner, kuis konversi bilangan interaktif, dan sertifikat resmi SMKS Purnama Gempol.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
